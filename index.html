@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RLS巡礼">
+<title>スタバ RLS巡礼</title>
+<style>
+  :root {
+    --green:#006241;--green-l:#00754a;--gold:#d4af37;--gold-l:#f4d35e;
+    --bg:#f5f1ea;--bg2:#ede5d6;--card:#fff;--border:#e0d6c2;--border2:#d4c8b0;
+    --text:#2d2d2d;--text2:#665e4a;--text3:#999;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:"Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);min-height:100dvh;color:var(--text)}
+  #header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--green) 0%,var(--green-l) 100%);padding:10px 16px 8px;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+  .header-top{display:flex;align-items:center;gap:8px;color:#fff;margin-bottom:6px}
+  .header-top h1{font-size:14px;font-weight:700;letter-spacing:.03em;line-height:1.3}
+  .header-count{margin-left:auto;text-align:right;flex-shrink:0}
+  .header-count .num{font-size:20px;font-weight:800;line-height:1}
+  .header-count .num span{font-size:12px;font-weight:400;opacity:.7}
+  .header-count .pct{font-size:11px;opacity:.85;margin-top:1px}
+  .progress-bar{height:5px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-l) 50%,var(--gold) 100%);box-shadow:0 0 8px rgba(244,211,94,.5);transition:width .7s cubic-bezier(.34,1.56,.64,1)}
+  #main{max-width:640px;margin:0 auto;padding:12px 12px 100px}
+  .search-wrap{position:relative;margin-bottom:8px}
+  .search-wrap input{width:100%;padding:10px 36px;border:2px solid var(--border2);border-radius:12px;background:#fff;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+  .search-wrap input:focus{border-color:var(--green)}
+  .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#aaa;pointer-events:none}
+  .search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;padding:4px;cursor:pointer;color:#aaa;display:none}
+  .filter-tabs{display:flex;gap:6px;margin-bottom:8px}
+  .filter-tab{flex:1;padding:8px 4px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid var(--border2);background:#fff;color:var(--text);transition:all .15s}
+  .filter-tab.active{background:var(--green);color:#fff;border-color:var(--green)}
+  .action-bar{display:flex;gap:6px;margin-bottom:12px}
+  .btn-icon{padding:9px 14px;border-radius:10px;border:2px solid var(--border2);background:#fff;color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .store-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px;transition:border-color .2s,box-shadow .2s}
+  .store-card.visited{border:2px solid var(--green);box-shadow:0 3px 14px rgba(0,98,65,.13);background:#f0faf5}
+  .card-header{display:flex;align-items:center;gap:10px;padding:12px 14px 0}
+  .pref-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green);color:#fff;white-space:nowrap}
+  .store-card.visited .pref-badge{background:var(--gold);color:#3d2800}
+  .check-btn{width:36px;height:36px;border-radius:50%;flex-shrink:0;border:2px solid var(--border2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .2s;margin-left:auto}
+  .check-btn.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(212,175,55,.4)}
+  .card-body{padding:8px 14px 12px}
+  .store-name{font-size:15px;font-weight:800;line-height:1.3;color:var(--text);margin-bottom:6px}
+  .store-card.visited .store-name{color:var(--green)}
+  .store-concept{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--gold)}
+  .store-addr{font-size:11px;color:var(--text3);margin-bottom:8px}
+  .visit-date{display:none;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:6px}
+  .visit-date.show{display:flex}
+  .store-note{padding:7px 10px;background:#fdf6e3;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);display:none;line-height:1.5;margin-bottom:8px}
+  .store-note.show{display:block}
+  .card-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .act-btn{display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;text-decoration:none;white-space:nowrap}
+  .act-official{background:rgba(0,98,65,.09);color:var(--green)}
+  .act-map{background:#e8f4fd;color:#1a6fa0}
+  .act-edit{background:#f5f1ea;color:var(--text)}
+  .edit-panel{display:none;padding:12px 14px 14px;border-top:1px solid #f0e8d8;background:#faf6ed}
+  .edit-panel.show{display:block}
+  .edit-panel label{display:block;font-size:11px;font-weight:600;color:#666;margin-bottom:3px;margin-top:10px}
+  .edit-panel label:first-child{margin-top:0}
+  .edit-panel input[type="date"],.edit-panel textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fff;-webkit-appearance:none}
+  .edit-panel textarea{resize:none;height:64px}
+  .edit-panel input:focus,.edit-panel textarea:focus{border-color:var(--green)}
+  .edit-btns{display:flex;gap:6px;margin-top:10px}
+  .edit-save{flex:1;padding:9px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+  .edit-cancel{padding:9px 16px;background:#fff;color:var(--text);border:1.5px solid var(--border2);border-radius:8px;font-size:13px;cursor:pointer}
+  .empty{text-align:center;padding:48px 16px;color:var(--text3);font-size:14px}
+  ::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body>
+<div id="header">
+  <div class="header-top">
+    <span>🌟</span>
+    <h1>スタバ リージョナル<br>ランドマークストア 巡礼</h1>
+    <div class="header-count">
+      <div class="num" id="h-visited">0<span> / 29</span></div>
+      <div class="pct" id="h-pct">0% 達成</div>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+<div id="main">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="search-input" placeholder="店舗名・都道府県・コンセプトを検索" autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">すべて <span id="cnt-all"></span></button>
+    <button class="filter-tab" data-filter="unvisited">未訪問 <span id="cnt-unvisited"></span></button>
+    <button class="filter-tab" data-filter="visited">訪問済 <span id="cnt-visited"></span></button>
+  </div>
+  <div class="action-bar">
+    <button class="btn-icon" id="btn-export" style="flex:1;font-size:13px;font-weight:700;gap:6px;">⬇ データをエクスポート</button>
+    <label class="btn-icon" style="cursor:pointer;" title="インポート">⬆<input type="file" accept=".json" id="import-file" style="display:none"></label>
+  </div>
+  <div id="store-list"></div>
+</div>
+<script>
+const STORES=[
+  {id:"kushiro",name:"釧路鶴見橋店",pref:"北海道",address:"北海道釧路市北大通14丁目2-1",concept:"釧路川と幣舞橋を望む煉瓦造りの歴史的建築を活かした店舗。大正時代の建物の意匠を随所に残しながら、地域の文化を発信。",official:"https://store.starbucks.co.jp/detail-1549/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+釧路鶴見橋店"},
+  {id:"hirosaki",name:"弘前公園前店",pref:"青森",address:"青森県弘前市上白銀町1-1",concept:"国の登録有形文化財「旧第八師団長官舎」を活用。弘前城公園の目の前に位置し、大正ロマンの面影を残す建築。桜の名所として知られる公園に隣接。",official:"https://store.starbucks.co.jp/detail-1549/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+弘前公園前店"},
+  {id:"kawagoe",name:"川越鐘つき通り店",pref:"埼玉",address:"埼玉県川越市幸町15-18",concept:"蔵造りの街並みが続く川越・一番街に位置。外観は伝統的な蔵造り、内装は地域の歴史・地元色を尊重したデザイン。",official:"https://store.starbucks.co.jp/detail-1554/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+川越鐘つき通り店"},
+  {id:"futakotamagawa",name:"二子玉川公園店",pref:"東京",address:"東京都世田谷区玉川1-16-1 二子玉川公園内",concept:"多摩川沿いの二子玉川公園内に建つサステイナブル建築。緑と水辺の景観に溶け込む開放的な空間。",official:"https://store.starbucks.co.jp/detail-1138/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+二子玉川公園店"},
+  {id:"shinjukugyoen",name:"新宿御苑店",pref:"東京",address:"東京都新宿区新宿1-1 新宿御苑内",concept:"国民公園・新宿御苑内の特別な一店。都心のオアシスとして四季の自然と調和した落ち着きある空間。",official:"https://store.starbucks.co.jp/detail-1838/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+新宿御苑店"},
+  {id:"shibuyatsutaya",name:"SHIBUYA TSUTAYA 2F店",pref:"東京",address:"東京都渋谷区宇田川町21-6 SHIBUYA TSUTAYA 2F",concept:"渋谷スクランブル交差点を見下ろす都市型ランドマーク。「STARBUCKS Green Ribbon」が空間全体を包み込む唯一無二のデザイン。",official:"https://store.starbucks.co.jp/detail-2003/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+SHIBUYA+TSUTAYA+2F店"},
+  {id:"kamakura",name:"鎌倉御成町店",pref:"神奈川",address:"神奈川県鎌倉市御成町11-4",concept:"歴史ある古都・鎌倉の地元の方々に憩いの場として愛される店舗。縁側や日本庭園で鎌倉の風情を感じながら一息つける。",official:"https://store.starbucks.co.jp/detail-624/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+鎌倉御成町店"},
+  {id:"toyama",name:"富山環水公園店",pref:"富山",address:"富山県富山市湊入船町2-4 富岩運河環水公園内",concept:"「世界一美しいスタバ」と称されることも。富岩運河環水公園内に建つガラス張りの建築。大きな窓からは公園のシンボル「天門橋」を望む絶景席が人気。",official:"https://store.starbucks.co.jp/detail-897/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+富山環水公園店"},
+  {id:"zenkoji",name:"信州善光寺仲見世通り店",pref:"長野",address:"長野県長野市元善町483",concept:"善光寺の仁王門に近接する2階建て日本家屋。「賑わいと静寂、光と影」をコンセプトに5種類の長野県産木材を使用。長野市景観賞受賞。",official:"https://store.starbucks.co.jp/detail-1789/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+信州善光寺仲見世通り店"},
+  {id:"hamamatsu",name:"浜松城公園店",pref:"静岡",address:"静岡県浜松市中央区元城町218-2 浜松城公園内",concept:"浜松城公園の森に包まれるような建築。既存の木を最大限活かし、やむなく伐採した木を取手やアートに再活用したサステイナブルな店舗。",official:"https://store.starbucks.co.jp/detail-1565/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+浜松城公園店"},
+  {id:"takefu",name:"武生中央公園店",pref:"福井",address:"福井県越前市府中1丁目1-1 武生中央公園内",concept:"絵本作家かこさとし氏監修の武生中央公園内。ガラス面を多用し公園との一体感を演出、内外装に木材を多く取り入れた温もりある空間。",official:"https://store.starbucks.co.jp/detail-1569/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+武生中央公園店"},
+  {id:"ninenzaka",name:"京都二寧坂ヤサカ茶屋店",pref:"京都",address:"京都府京都市東山区桝屋町349",concept:"世界初・畳の間でコーヒー体験ができる店舗。築100年超の伝統的な日本家屋。清水寺へ続く二年坂の石畳に溶け込む唯一無二の空間。",official:"https://store.starbucks.co.jp/detail-1476/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都二寧坂ヤサカ茶屋店"},
+  {id:"uji",name:"京都宇治平等院表参道店",pref:"京都",address:"京都府宇治市宇治蓮華5-1",concept:"世界遺産・平等院の表参道に位置。抹茶の産地・宇治ならではの特別メニューも。京都・宇治の伝統と歴史に敬意を払った建築デザイン。",official:"https://store.starbucks.co.jp/detail-1443/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都宇治平等院表参道店"},
+  {id:"kyotomaruyama",name:"京都円山公園 菊の渓店",pref:"京都",address:"京都府京都市東山区円山町620-1",concept:"2026年3月開業。日本初・国の名勝に指定された公園内のスタバ。八坂神社隣接の円山公園の自然と歴史に溶け込む最新ランドマーク店舗。",official:"https://store.starbucks.co.jp/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都円山公園+菊の渓店"},
+  {id:"ise",name:"伊勢 内宮前店",pref:"三重",address:"三重県伊勢市宇治中之切町12",concept:"伊勢神宮・内宮のおはらい町に位置。神宮の建築様式にならった切妻屋根と木の格子が特徴的な和の空間。",official:"https://store.starbucks.co.jp/detail-1889/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+伊勢+内宮前店"},
+  {id:"osaka",name:"大阪城公園森ノ宮店",pref:"大阪",address:"大阪府大阪市中央区大阪城3-1 大阪城公園内",concept:"大阪城公園の豊かな自然の中に建つ。大阪の歴史とコーヒーの世界観が交差する、公園の緑に囲まれたサードプレイス。",official:"https://store.starbucks.co.jp/detail-1592/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+大阪城公園森ノ宮店"},
+  {id:"nara",name:"奈良鴻ノ池運動公園店",pref:"奈良",address:"奈良県奈良市鴻ノ池町1-1",concept:"奈良の伝統工芸・赤膚焼や奈良墨のエッセンスを随所に取り入れた、緑豊かな鴻ノ池運動公園内の店舗。",official:"https://store.starbucks.co.jp/detail-1514/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+奈良鴻ノ池運動公園店"},
+  {id:"awaji",name:"淡路サービスエリア(下り線)店",pref:"兵庫",address:"兵庫県淡路市岩屋2568 淡路サービスエリア（下り線）",concept:"高速道路のSAにある唯一のリージョナルランドマークストア。明石海峡大橋と瀬戸内海を一望できる絶景ロケーション。観覧車のすぐ横。",official:"https://store.starbucks.co.jp/detail-949/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+淡路サービスエリア下り線店"},
+  {id:"kitanoijinkan",name:"神戸北野異人館店",pref:"兵庫",address:"兵庫県神戸市中央区北野町3-1-31 北野物語館",concept:"1907年建造のアメリカ人邸宅を改修した2階建て洋館。阪神・淡路大震災で被災後、神戸市が復元・移築。異国情緒あふれる建築でコーヒーを楽しめる。",official:"https://store.starbucks.co.jp/detail-940/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+神戸北野異人館店"},
+  {id:"merikenpark",name:"神戸メリケンパーク店",pref:"兵庫",address:"兵庫県神戸市中央区波止場町2-4",concept:"神戸港のパノラマを楽しめるサステイナブル建築。バーに地元産木材、セメントボードにコーヒー豆かすを再利用した環境配慮型店舗。",official:"https://store.starbucks.co.jp/detail-1432/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+神戸メリケンパーク店"},
+  {id:"tottori",name:"シャミネ鳥取店",pref:"鳥取",address:"鳥取県鳥取市東品治町101 シャミネ鳥取",concept:"47都道府県最後のスタバとして2015年に開業した鳥取県1号店。地域コミュニティとのつながりを大切に、建材の一部に鳥取県産木材を使用。",official:"https://store.starbucks.co.jp/detail-1287/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+シャミネ鳥取店"},
+  {id:"izumo",name:"出雲大社店",pref:"島根",address:"島根県出雲市大社町杵築南1346-9",concept:"縁結びの神様・出雲大社の参道入口「勢溜の大鳥居」の目の前。1階に縁側風ベンチ、2階から出雲大社の眺望を楽しめる和洋融合の空間。",official:"https://store.starbucks.co.jp/detail-1208/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+出雲大社店"},
+  {id:"itsukushima",name:"厳島表参道店",pref:"広島",address:"広島県廿日市市宮島町507-2",concept:"世界遺産・宮島の表参道商店街に建つ。フェリーで渡る島にある日本唯一の海島スタバ。大きな窓から浮島鳥居と瀬戸内海の絶景を楽しめる。",official:"https://store.starbucks.co.jp/detail-1354/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+厳島表参道店"},
+  {id:"yamaguchi",name:"山口市中央公園店",pref:"山口",address:"山口県山口市中央公園内",concept:"山口の豊かな自然に囲まれた公園内の店舗。周防国の歴史と山口の伝統工芸が随所に表現されたデザイン。",official:"https://store.starbucks.co.jp/detail-1477/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+山口市中央公園店"},
+  {id:"dogo",name:"道後温泉駅舎店",pref:"愛媛",address:"愛媛県松山市道後町1-14 道後温泉駅舎内",concept:"明治時代から続く路面電車の終着駅・道後温泉駅の駅舎内。旧レールや枕木を再利用した内装など、明治時代へのオマージュが随所に。",official:"https://store.starbucks.co.jp/detail-1577/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+道後温泉駅舎店"},
+  {id:"dazaifu",name:"太宰府天満宮表参道店",pref:"福岡",address:"福岡県太宰府市宰府3-2-43",concept:"建築家・隈研吾氏設計。釘を1本も使わず約2000本の杉材を木組みで構成。全長4kmにおよぶ木組みが壮観な、自然素材と伝統と現代の融合。",official:"https://store.starbucks.co.jp/detail-1058/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+太宰府天満宮表参道店"},
+  {id:"ohori",name:"福岡大濠公園店",pref:"福岡",address:"福岡県福岡市中央区大濠公園1-9",concept:"大濠公園の水辺に隣接するガラス張りの開放的な建築。公園と水景を一望し、福岡市民の憩いの場に溶け込む。",official:"https://store.starbucks.co.jp/detail-962/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+福岡大濠公園店"},
+  {id:"mojiko",name:"門司港駅店",pref:"福岡",address:"福岡県北九州市門司区西海岸1-5-31 門司港駅内",concept:"国の重要文化財・門司港駅舎内に位置する全国唯一の重要文化財内スタバ。大正時代のネオ・ルネサンス様式の歴史的駅舎でコーヒーを楽しめる。",official:"https://store.starbucks.co.jp/detail-2137/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+門司港駅店"},
+  {id:"sengan",name:"鹿児島仙巌園店",pref:"鹿児島",address:"鹿児島県鹿児島市吉野町9700-1 仙巌園隣接",concept:"世界文化遺産・仙巌園に隣接する登録有形文化財をリノベーション。薩摩切子をモチーフにした照明や鹿児島県産杉のテーブルが美しい。",official:"https://store.starbucks.co.jp/detail-1441/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+鹿児島仙巌園店"},
+  {id:"okinawa",name:"沖縄本部町店",pref:"沖縄",address:"沖縄県国頭郡本部町字伊豆味2220",concept:"やんばるの豊かな海と山に囲まれたロケーション。沖縄の砂浜に流れついたプラスチックで制作したアートや、琉球松のテーブルを設置。",official:"https://store.starbucks.co.jp/detail-1543/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+沖縄本部町店"},
+];
+
+const KEY='starbucks-rls-v2';
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return{}}}
+function save(r){localStorage.setItem(KEY,JSON.stringify(r))}
+let records=load(),filter='all',search='';
+const gV=id=>records[id]?.visited||false;
+const gD=id=>records[id]?.visitDate||'';
+const gN=id=>records[id]?.note||'';
+
+function toggleV(id){
+  if(!records[id])records[id]={};
+  records[id].visited=!records[id].visited;
+  if(records[id].visited&&!records[id].visitDate)records[id].visitDate=new Date().toISOString().slice(0,10);
+  save(records);render();
+}
+function saveEdit(id,d,n){if(!records[id])records[id]={};records[id].visitDate=d;records[id].note=n;save(records);render()}
+
+function updateHeader(){
+  const total=STORES.length,visited=STORES.filter(s=>gV(s.id)).length,pct=Math.round(visited/total*100);
+  document.getElementById('h-visited').innerHTML=`${visited}<span> / ${total}</span>`;
+  document.getElementById('h-pct').textContent=`${pct}% 達成`;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  const f=getFiltered();
+  document.getElementById('cnt-all').textContent=`(${f.length})`;
+  document.getElementById('cnt-visited').textContent=`(${f.filter(s=>gV(s.id)).length})`;
+  document.getElementById('cnt-unvisited').textContent=`(${f.filter(s=>!gV(s.id)).length})`;
+}
+
+function getFiltered(){
+  return STORES.filter(s=>{
+    if(filter==='visited'&&!gV(s.id))return false;
+    if(filter==='unvisited'&&gV(s.id))return false;
+    if(search){const q=search.toLowerCase();return s.name.toLowerCase().includes(q)||s.pref.toLowerCase().includes(q)||s.concept.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||(gN(s.id)||'').toLowerCase().includes(q)}
+    return true;
+  });
+}
+
+function render(){
+  updateHeader();
+  const list=document.getElementById('store-list'),filtered=getFiltered();
+  if(!filtered.length){list.innerHTML='<div class="empty">該当する店舗がありません</div>';return}
+  list.innerHTML='';
+  filtered.forEach(store=>{
+    const visited=gV(store.id),vdate=gD(store.id),note=gN(store.id);
+    const card=document.createElement('div');
+    card.className='store-card'+(visited?' visited':'');
+    card.innerHTML=`
+      <div class="card-header">
+        <div class="pref-badge">${store.pref}</div>
+        <button class="check-btn ${visited?'checked':''}" data-id="${store.id}">${visited?'☕':'○'}</button>
+      </div>
+      <div class="card-body">
+        <div class="store-name">${store.name}</div>
+        <div class="store-concept">${store.concept}</div>
+        <div class="store-addr">📍 ${store.address}</div>
+        <div class="visit-date ${visited&&vdate?'show':''}">📅 ${vdate}</div>
+        <div class="store-note ${note?'show':''}">${note}</div>
+        <div class="card-actions">
+          <a class="act-btn act-official" href="${store.official}" target="_blank" rel="noopener">🌐 公式ページ（写真あり）</a>
+          <a class="act-btn act-map" href="${store.maps}" target="_blank" rel="noopener">🗺 地図</a>
+          <button class="act-btn act-edit" data-edit="${store.id}">✏️ メモ・日付</button>
+        </div>
+      </div>
+      <div class="edit-panel" id="edit-${store.id}">
+        <label>訪問日</label>
+        <input type="date" id="edate-${store.id}" value="${vdate}">
+        <label>メモ・感想</label>
+        <textarea id="enote-${store.id}" placeholder="建物の印象、飲んだドリンク、混雑状況など...">${note}</textarea>
+        <div class="edit-btns">
+          <button class="edit-save" data-save="${store.id}">保存</button>
+          <button class="edit-cancel" data-cancel="${store.id}">キャンセル</button>
+        </div>
+      </div>`;
+    card.querySelector('.check-btn').addEventListener('click',()=>toggleV(store.id));
+    card.querySelector('[data-edit]').addEventListener('click',()=>document.getElementById('edit-'+store.id).classList.toggle('show'));
+    card.querySelector('[data-save]').addEventListener('click',()=>saveEdit(store.id,document.getElementById('edate-'+store.id).value,document.getElementById('enote-'+store.id).value));
+    card.querySelector('[data-cancel]').addEventListener('click',()=>document.getElementById('edit-'+store.id).classList.remove('show'));
+    list.appendChild(card);
+  });
+}
+
+document.getElementById('search-input').addEventListener('input',function(){search=this.value;document.getElementById('search-clear').style.display=search?'block':'none';render()});
+document.getElementById('search-clear').addEventListener('click',()=>{document.getElementById('search-input').value='';search='';document.getElementById('search-clear').style.display='none';render()});
+document.querySelectorAll('.filter-tab').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));this.classList.add('active');filter=this.dataset.filter;render()}));
+document.getElementById('btn-export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),records},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`starbucks-rls-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)});
+document.getElementById('import-file').addEventListener('change',function(){const file=this.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(confirm('データをインポートします。現在の記録は上書きされます。続行しますか？')){records=data.records||data;save(records);render()}}catch{alert('ファイルの読み込みに失敗しました')}};reader.readAsText(file);this.value=''});
+render();
+</script>
+</body>
+</html>
