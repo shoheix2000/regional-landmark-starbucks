@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -17,56 +18,56 @@
   body{font-family:"Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);min-height:100dvh;color:var(--text)}
   #header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--green) 0%,var(--green-l) 100%);padding:10px 16px 8px;box-shadow:0 2px 16px rgba(0,0,0,.25)}
   .header-top{display:flex;align-items:center;gap:8px;color:#fff;margin-bottom:6px}
-  .header-top h1{font-size:14px;font-weight:700;letter-spacing:.03em;line-height:1.3}
+  .header-top h1{font-size:16px;font-weight:700;letter-spacing:.03em;line-height:1.3}
   .header-count{margin-left:auto;text-align:right;flex-shrink:0}
   .header-count .num{font-size:20px;font-weight:800;line-height:1}
-  .header-count .num span{font-size:12px;font-weight:400;opacity:.7}
-  .header-count .pct{font-size:11px;opacity:.85;margin-top:1px}
+  .header-count .num span{font-size:14px;font-weight:400;opacity:.7}
+  .header-count .pct{font-size:13px;opacity:.85;margin-top:1px}
   .progress-bar{height:5px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
   .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-l) 50%,var(--gold) 100%);box-shadow:0 0 8px rgba(244,211,94,.5);transition:width .7s cubic-bezier(.34,1.56,.64,1)}
   #main{max-width:640px;margin:0 auto;padding:12px 12px 100px}
   .search-wrap{position:relative;margin-bottom:8px}
-  .search-wrap input{width:100%;padding:10px 36px;border:2px solid var(--border2);border-radius:12px;background:#fff;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+  .search-wrap input{width:100%;padding:10px 36px;border:2px solid var(--border2);border-radius:12px;background:#fff;font-size:16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
   .search-wrap input:focus{border-color:var(--green)}
   .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#aaa;pointer-events:none}
   .search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;padding:4px;cursor:pointer;color:#aaa;display:none}
   .filter-tabs{display:flex;gap:6px;margin-bottom:8px}
-  .filter-tab{flex:1;padding:8px 4px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid var(--border2);background:#fff;color:var(--text);transition:all .15s}
+  .filter-tab{flex:1;padding:8px 4px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:2px solid var(--border2);background:#fff;color:var(--text);transition:all .15s}
   .filter-tab.active{background:var(--green);color:#fff;border-color:var(--green)}
   .action-bar{display:flex;gap:6px;margin-bottom:12px}
   .btn-icon{padding:9px 14px;border-radius:10px;border:2px solid var(--border2);background:#fff;color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
   .store-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px;transition:border-color .2s,box-shadow .2s}
   .store-card.visited{border:2px solid var(--green);box-shadow:0 3px 14px rgba(0,98,65,.13);background:#f0faf5}
   .card-header{display:flex;align-items:center;gap:10px;padding:12px 14px 0}
-  .pref-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green);color:#fff;white-space:nowrap}
+  .pref-badge{font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green);color:#fff;white-space:nowrap}
   .store-card.visited .pref-badge{background:var(--gold);color:#3d2800}
   .check-btn{width:36px;height:36px;border-radius:50%;flex-shrink:0;border:2px solid var(--border2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .2s;margin-left:auto}
   .check-btn.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(212,175,55,.4)}
   .card-body{padding:8px 14px 12px}
-  .store-name{font-size:15px;font-weight:800;line-height:1.3;color:var(--text);margin-bottom:6px}
+  .store-name{font-size:17px;font-weight:800;line-height:1.3;color:var(--text);margin-bottom:6px}
   .store-card.visited .store-name{color:var(--green)}
-  .store-concept{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--gold)}
-  .store-addr{font-size:11px;color:var(--text3);margin-bottom:8px}
-  .visit-date{display:none;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:6px}
+  .store-concept{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--gold)}
+  .store-addr{font-size:13px;color:var(--text3);margin-bottom:8px}
+  .visit-date{display:none;align-items:center;gap:4px;font-size:14px;color:var(--green);font-weight:600;margin-bottom:6px}
   .visit-date.show{display:flex}
-  .store-note{padding:7px 10px;background:#fdf6e3;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);display:none;line-height:1.5;margin-bottom:8px}
+  .store-note{padding:7px 10px;background:#fdf6e3;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:13px;color:var(--text2);display:none;line-height:1.5;margin-bottom:8px}
   .store-note.show{display:block}
   .card-actions{display:flex;gap:6px;flex-wrap:wrap}
-  .act-btn{display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;text-decoration:none;white-space:nowrap}
+  .act-btn{display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;text-decoration:none;white-space:nowrap}
   .act-official{background:rgba(0,98,65,.09);color:var(--green)}
   .act-map{background:#e8f4fd;color:#1a6fa0}
   .act-edit{background:#f5f1ea;color:var(--text)}
   .edit-panel{display:none;padding:12px 14px 14px;border-top:1px solid #f0e8d8;background:#faf6ed}
   .edit-panel.show{display:block}
-  .edit-panel label{display:block;font-size:11px;font-weight:600;color:#666;margin-bottom:3px;margin-top:10px}
+  .edit-panel label{display:block;font-size:13px;font-weight:600;color:#666;margin-bottom:3px;margin-top:10px}
   .edit-panel label:first-child{margin-top:0}
-  .edit-panel input[type="date"],.edit-panel textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fff;-webkit-appearance:none}
+  .edit-panel input[type="date"],.edit-panel textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:15px;outline:none;font-family:inherit;background:#fff;-webkit-appearance:none}
   .edit-panel textarea{resize:none;height:64px}
   .edit-panel input:focus,.edit-panel textarea:focus{border-color:var(--green)}
   .edit-btns{display:flex;gap:6px;margin-top:10px}
-  .edit-save{flex:1;padding:9px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
-  .edit-cancel{padding:9px 16px;background:#fff;color:var(--text);border:1.5px solid var(--border2);border-radius:8px;font-size:13px;cursor:pointer}
-  .empty{text-align:center;padding:48px 16px;color:var(--text3);font-size:14px}
+  .edit-save{flex:1;padding:9px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+  .edit-cancel{padding:9px 16px;background:#fff;color:var(--text);border:1.5px solid var(--border2);border-radius:8px;font-size:15px;cursor:pointer}
+  .empty{text-align:center;padding:48px 16px;color:var(--text3);font-size:16px}
   ::-webkit-scrollbar{display:none}
 </style>
 </head>
@@ -114,6 +115,7 @@ const STORES=[
   {id:"takefu",name:"武生中央公園店",pref:"福井",address:"福井県越前市府中1丁目1-1 武生中央公園内",concept:"絵本作家かこさとし氏監修の武生中央公園内。ガラス面を多用し公園との一体感を演出、内外装に木材を多く取り入れた温もりある空間。",official:"https://store.starbucks.co.jp/detail-1569/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+武生中央公園店"},
   {id:"ninenzaka",name:"京都二寧坂ヤサカ茶屋店",pref:"京都",address:"京都府京都市東山区桝屋町349",concept:"世界初・畳の間でコーヒー体験ができる店舗。築100年超の伝統的な日本家屋。清水寺へ続く二年坂の石畳に溶け込む唯一無二の空間。",official:"https://store.starbucks.co.jp/detail-1476/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都二寧坂ヤサカ茶屋店"},
   {id:"uji",name:"京都宇治平等院表参道店",pref:"京都",address:"京都府宇治市宇治蓮華5-1",concept:"世界遺産・平等院の表参道に位置。抹茶の産地・宇治ならではの特別メニューも。京都・宇治の伝統と歴史に敬意を払った建築デザイン。",official:"https://store.starbucks.co.jp/detail-1443/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都宇治平等院表参道店"},
+  {id:"kyotomaruyama",name:"京都円山公園 菊の渓店",pref:"京都",address:"京都府京都市東山区円山町620-1",concept:"2026年3月開業。日本初・国の名勝に指定された公園内のスタバ。八坂神社隣接の円山公園の自然と歴史に溶け込む最新ランドマーク店舗。",official:"https://store.starbucks.co.jp/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+京都円山公園+菊の渓店"},
   {id:"ise",name:"伊勢 内宮前店",pref:"三重",address:"三重県伊勢市宇治中之切町12",concept:"伊勢神宮・内宮のおはらい町に位置。神宮の建築様式にならった切妻屋根と木の格子が特徴的な和の空間。",official:"https://store.starbucks.co.jp/detail-1889/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+伊勢+内宮前店"},
   {id:"osaka",name:"大阪城公園森ノ宮店",pref:"大阪",address:"大阪府大阪市中央区大阪城3-1 大阪城公園内",concept:"大阪城公園の豊かな自然の中に建つ。大阪の歴史とコーヒーの世界観が交差する、公園の緑に囲まれたサードプレイス。",official:"https://store.starbucks.co.jp/detail-1592/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+大阪城公園森ノ宮店"},
   {id:"nara",name:"奈良鴻ノ池運動公園店",pref:"奈良",address:"奈良県奈良市鴻ノ池町1-1",concept:"奈良の伝統工芸・赤膚焼や奈良墨のエッセンスを随所に取り入れた、緑豊かな鴻ノ池運動公園内の店舗。",official:"https://store.starbucks.co.jp/detail-1514/",maps:"https://www.google.com/maps/search/?api=1&query=スターバックス+奈良鴻ノ池運動公園店"},
